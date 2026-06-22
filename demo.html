@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok API Integration — Demo</title>
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --text: #f1f1f1;
+            --muted: #9ca3af;
+            --border: #2e2e2e;
+            --accent: #fe2c55;
+            --green: #22c55e;
+            --blue: #3b82f6;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; text-align: center; }
+        .subtitle { color: var(--muted); text-align: center; margin-bottom: 2rem; font-size: 0.9rem; }
+        .step {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .step-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+        .step-num {
+            width: 32px; height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.9rem;
+        }
+        .step h3 { font-size: 1.1rem; }
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre;
+            color: #e5e5e5;
+            margin: 0.5rem 0;
+        }
+        .json-key { color: #93c5fd; }
+        .json-val { color: #86efac; }
+        .endpoint {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .post { background: #2563eb; color: #fff; }
+        .get { background: #16a34a; color: #fff; }
+        .status { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-ok { background: #166534; color: #86efac; }
+        .badge-pending { background: #713f12; color: #fcd34d; }
+        .flow-arrow { text-align: center; color: var(--muted); font-size: 1.5rem; margin: 0.5rem 0; }
+        .scopes { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+        .scope { background: #1e1b4b; color: #c4b5fd; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 TikTok Kit — API Demo</h1>
+        <p class="subtitle">tiktok.tnis.cloud &nbsp;|&nbsp; Backend API Integration</p>
+
+        <!-- Step 1: OAuth -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-num">1</span>
+                <h3>OAuth Authentication</h3>
+                <span class="badge badge-ok">Required</span>
+            </div>
+            <p style="color:var(--muted); margin-bottom:0.75rem;">User authorizes via TikTok OAuth 2.0. Redirect to TikTok login:</p>
+            <div class="code-block"><span style="color:var(--muted)">GET</span> https://www.tiktok.com/v2/auth/authorize/
+                <span style="color:#fcd34d">?client_key</span>=<span class="json-val">YOUR_CLIENT_KEY</span>
+                <span style="color:#fcd34d">&redirect_uri</span>=<span class="json-val">https://tiktok.tnis.cloud/callback</span>
+                <span style="color:#fcd34d">&scope</span>=<span class="json-val">user.info.basic,video.upload,video.publish,comment.list,video.insights</span>
+                <span style="color:#fcd34d">&state</span>=<span class="json-val">random_state_string</span></div>
+            <p style="color:var(--muted); margin:0.5rem 0;">After user approves → TikTok redirects back with auth code → exchange for access token:</p>
+            <div class="code-block"><span style="color:var(--muted)">POST</span> https://open.tiktokapis.com/v2/oauth/token/
+
+                {
+                  <span class="json-key">"client_key"</span>: <span class="json-val">"YOUR_CLIENT_KEY"</span>,
+                  <span class="json-key">"client_secret"</span>: <span class="json-val">"YOUR_CLIENT_SECRET"</span>,
+                  <span class="json-key">"code"</span>: <span class="json-val">"authorization_code"</span>,
+                  <span class="json-key">"grant_type"</span>: <span class="json-val">"authorization_code"</span>,
+                  <span class="json-key">"redirect_uri"</span>: <span class="json-val">"https://tiktok.tnis.cloud/callback"</span>
+                }</div>
+            <div class="scopes">
+                <span class="scope">user.info.basic</span>
+                <span class="scope">video.upload</span>
+                <span class="scope">video.publish</span>
+                <span class="scope">comment.list</span>
+                <span class="scope">video.insights</span>
+            </div>
+        </div>
+
+        <div class="flow-arrow">⬇</div>
+
+        <!-- Step 2: Upload Video -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-num">2</span>
+                <h3>Video Upload & Publish</h3>
+                <span class="badge badge-ok">video.upload / video.publish</span>
+            </div>
+            <p style="color:var(--muted); margin-bottom:0.5rem;">User sends video via our backend API to TikTok:</p>
+            <div class="code-block"><span class="endpoint post">POST</span> <span style="color:var(--muted)">Our API</span> /api/v1/video/upload
+
+                <span style="color:var(--muted)">Authorization: Bearer &lt;access_token&gt;</span>
+
+                {
+                  <span class="json-key">"video_file"</span>: <span class="json-val">"[binary video data]"</span>,
+                  <span class="json-key">"caption"</span>: <span class="json-val">"Check out my new video! #fyp"</span>,
+                  <span class="json-key">"privacy_level"</span>: <span class="json-val">"PUBLIC"</span>
+                }
+
+                <span style="color:var(--muted)">→ Response:</span>
+                {
+                  <span class="json-key">"status"</span>: <span class="json-val">"success"</span>,
+                  <span class="json-key">"video_id"</span>: <span class="json-val">"7439281756394872838"</span>,
+                  <span class="json-key">"share_url"</span>: <span class="json-val">"https://www.tiktok.com/@user/video/7439281756394872838"</span>
+                }</div>
+        </div>
+
+        <div class="flow-arrow">⬇</div>
+
+        <!-- Step 3: Read Comments -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-num">3</span>
+                <h3>Comment Monitoring</h3>
+                <span class="badge badge-ok">comment.list</span>
+            </div>
+            <div class="code-block"><span class="endpoint get">GET</span> <span style="color:var(--muted)">Our API</span> /api/v1/video/:video_id/comments
+
+                <span style="color:var(--muted)">Authorization: Bearer &lt;access_token&gt;</span>
+
+                <span style="color:var(--muted)">→ Response:</span>
+                {
+                  <span class="json-key">"comments"</span>: [
+                    {
+                      <span class="json-key">"id"</span>: <span class="json-val">"cmt_123456"</span>,
+                      <span class="json-key">"user"</span>: <span class="json-val">"@fan_user"</span>,
+                      <span class="json-key">"text"</span>: <span class="json-val">"Amazing content! 🔥"</span>,
+                      <span class="json-key">"like_count"</span>: <span class="json-val">42</span>,
+                      <span class="json-key">"created_at"</span>: <span class="json-val">"2026-06-22T10:30:00Z"</span>
+                    },
+                    ...
+                  ],
+                  <span class="json-key">"total"</span>: <span class="json-val">156</span>,
+                  <span class="json-key">"has_more"</span>: <span class="json-val">true</span>
+                }</div>
+        </div>
+
+        <div class="flow-arrow">⬇</div>
+
+        <!-- Step 4: Analytics -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-num">4</span>
+                <h3>Video Analytics</h3>
+                <span class="badge badge-ok">video.insights</span>
+            </div>
+            <div class="code-block"><span class="endpoint get">GET</span> <span style="color:var(--muted)">Our API</span> /api/v1/video/:video_id/analytics
+
+                <span style="color:var(--muted)">Authorization: Bearer &lt;access_token&gt;</span>
+
+                <span style="color:var(--muted)">→ Response:</span>
+                {
+                  <span class="json-key">"video_id"</span>: <span class="json-val">"7439281756394872838"</span>,
+                  <span class="json-key">"analytics"</span>: {
+                    <span class="json-key">"views"</span>: <span class="json-val">12450</span>,
+                    <span class="json-key">"likes"</span>: <span class="json-val">3200</span>,
+                    <span class="json-key">"comments"</span>: <span class="json-val">156</span>,
+                    <span class="json-key">"shares"</span>: <span class="json-val">890</span>,
+                    <span class="json-key">"watch_time_avg"</span>: <span class="json-val">"8.2s"</span>,
+                    <span class="json-key">"traffic_source"</span>: {
+                      <span class="json-key">"fyp"</span>: <span class="json-val">"68%"</span>,
+                      <span class="json-key">"profile"</span>: <span class="json-val">"15%"</span>,
+                      <span class="json-key">"search"</span>: <span class="json-val">"10%"</span>,
+                      <span class="json-key">"other"</span>: <span class="json-val">"7%"</span>
+                    }
+                  }
+                }</div>
+        </div>
+
+        <p style="text-align:center; color:var(--muted); margin-top:2rem; font-size:0.85rem;">
+            © 2026 TikTok Kit &middot; <a href="index.html" style="color:var(--blue)">Home</a> &middot;
+            <a href="privacy.html" style="color:var(--blue)">Privacy</a> &middot;
+            <a href="terms.html" style="color:var(--blue)">Terms</a>
+        </p>
+    </div>
+</body>
+</html>
