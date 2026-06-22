@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Kit — Công cụ TikTok API</title>
+    <style>
+        :root {
+            --bg: #fafafa;
+            --card: #ffffff;
+            --text: #1a1a1a;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --accent: #6366f1;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f0f0f;
+                --card: #1a1a1a;
+                --text: #f1f1f1;
+                --muted: #9ca3af;
+                --border: #2e2e2e;
+                --accent: #818cf8;
+            }
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .hero .icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+        .hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .hero p { color: var(--muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto; }
+        .cards {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 500px;
+        }
+        .card {
+            flex: 1 1 200px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+        }
+        .card .emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+        .card h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+        .card span { font-size: 0.85rem; color: var(--muted); }
+        footer {
+            margin-top: 3rem;
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <span class="icon">🎬</span>
+        <h1>TikTok Kit</h1>
+        <p>Công cụ kết nối & tương tác với TikTok API — nhanh, đơn giản, không lưu trữ dữ liệu của bạn.</p>
+    </div>
+
+    <div class="cards">
+        <a href="privacy.html" class="card">
+            <span class="emoji">🔒</span>
+            <h3>Chính sách Bảo mật</h3>
+            <span>Cách chúng tôi xử lý dữ liệu</span>
+        </a>
+        <a href="terms.html" class="card">
+            <span class="emoji">📄</span>
+            <h3>Điều khoản Dịch vụ</h3>
+            <span>Quy định khi sử dụng dịch vụ</span>
+        </a>
+    </div>
+
+    <footer>
+        © 2026 TikTok Kit — <a href="mailto:support@example.com">Liên hệ</a>
+    </footer>
+</body>
+</html>
