@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Kit — Authorization Complete</title>
+    <style>
+        :root {
+            --bg: #fafafa;
+            --card: #ffffff;
+            --text: #1a1a1a;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --accent: #fe2c55;
+            --green: #22c55e;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f0f0f;
+                --card: #1a1a1a;
+                --text: #f1f1f1;
+                --muted: #9ca3af;
+                --border: #2e2e2e;
+            }
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            max-width: 480px;
+        }
+        .icon { font-size: 3rem; margin-bottom: 1rem; }
+        h1 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+        .code-box {
+            background: #0a0a0a;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+            color: #86efac;
+            text-align: left;
+            margin: 0.5rem 0;
+        }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">✅</div>
+        <h1>Authorization Successful</h1>
+        <p>You have successfully authorized TikTok Kit. You may close this window and return to the app.</p>
+        <p style="font-size: 0.75rem;">Callback URL: https://tiktok.tnis.cloud/callback</p>
+        <div id="code-info" style="display:none;">
+            <p style="font-size:0.8rem;">Authorization code received:</p>
+            <div class="code-box" id="auth-code"></div>
+        </div>
+        <div id="error-info" style="display:none;">
+            <p class="error" id="error-msg"></p>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const error = params.get('error');
+        const errDesc = params.get('error_description');
+        const state = params.get('state');
+
+        if (code) {
+            document.getElementById('code-info').style.display = 'block';
+            document.getElementById('auth-code').textContent = code;
+        }
+
+        if (error) {
+            document.getElementById('error-info').style.display = 'block';
+            document.getElementById('error-msg').textContent = 'Error: ' + error + (errDesc ? ' - ' + errDesc : '');
+            document.querySelector('.icon').textContent = '❌';
+            document.querySelector('h1').textContent = 'Authorization Failed';
+        }
+
+        if (state) {
+            console.log('State:', state);
+        }
+    </script>
+</body>
+</html>
